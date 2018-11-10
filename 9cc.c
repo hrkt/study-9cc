@@ -156,6 +156,11 @@ Node *expr() {
     pos++;
     return new_node('*', lhs, expr());
   }
+  if (tokens[pos].ty == '/') {
+    debug("accept: /\n");
+    pos++;
+    return new_node('/', lhs, expr());
+  }
   error("expr:想定しないトークンです: %s", tokens[pos].input);
 }
 
