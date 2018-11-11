@@ -18,7 +18,8 @@ clean:
 debug: 9cc
 	#./9cc '2*3+4*5'
 	#./9cc '1+2*3'
-	./9cc '2*3+1'
+	#./9cc '2*3+1'
+	./9cc '(1)'
 
 format: 
 	clang-format -i *.c *.h

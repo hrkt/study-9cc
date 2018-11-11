@@ -47,18 +47,23 @@ Node *new_node_num(int val) {
 
 Node *term() {
   if (tokens[pos].ty == TK_NUM) {
-    if (DEBUG) {
-      debug("数値ノードを生成\n");
-    }
-    return new_node_num(tokens[pos++].val);
+    debug("数値ノードを生成\n");
+    Node *node = new_node_num(tokens[pos].val);
+    pos++;
+    return node;
+    //return new_node_num(tokens[pos++].val);
   }
   if (tokens[pos].ty == '(') {
+    debug("(通過");
     pos++;
     Node *node = expr();
     if (tokens[pos].ty != ')') {
       error("開きカッコに対応する閉じカッコがありません: %s",
             tokens[pos].input);
-    }
+      exit(1);
+    } else {
+      debug(")通過");
+    } 
     pos++;
     return node;
   }
@@ -79,6 +84,7 @@ Node *mul() {
     return new_node('/', lhs, mul());
   }
   if (lhs->ty == ND_NUM) {
+    //pos++;
     return lhs;
   }
   error("mul:想定しないトークンです: %s", tokens[pos].input);
@@ -86,7 +92,8 @@ Node *mul() {
 
 Node *expr() {
   Node *lhs = mul();
-  if (tokens[pos].ty == TK_EOF) {
+  // if (tokens[pos].ty == TK_EOF) {
+  if (tokens[pos].ty == TK_EOF || tokens[pos].ty == ')') {
     return lhs;
   }
   if (tokens[pos].ty == '+') {
@@ -99,18 +106,6 @@ Node *expr() {
     pos++;
     return new_node('-', lhs, expr());
   }
-/*
-  if (tokens[pos].ty == '*') {
-    debug("accept: *\n");
-    pos++;
-    return new_node('*', lhs, expr());
-  }
-  if (tokens[pos].ty == '/') {
-    debug("accept: /\n");
-    pos++;
-    return new_node('/', lhs, expr());
-  }
-*/
   error("expr:想定しないトークンです: %s", tokens[pos].input);
 }
 
@@ -144,7 +139,8 @@ void gen(Node *node) {
   case '/':
     printf("  mov rdx, 0\n");
     printf("  div rdi\n");
-  }
+    break;
+ }
 
   printf("  push rax\n");
 }
