@@ -1,14 +1,14 @@
+#include "9cc.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "9cc.h"
 
 // pが指している文字列をトークンに分割してtokensに保存する
 void tokenize(char *p) {
   int i = 0;
   while (*p) {
-    if(DEBUG) {
+    if (DEBUG) {
       printf("tokenize char[%c]\n", *p);
     }
     // 空白文字をスキップ
@@ -17,7 +17,7 @@ void tokenize(char *p) {
       continue;
     }
 
-    //if (*p == '+' || *p == '-') {
+    // if (*p == '+' || *p == '-') {
     if (*p == '+' || *p == '-' || *p == '*' || *p == '/') {
       tokens[i].ty = *p;
       tokens[i].input = p;
@@ -32,8 +32,8 @@ void tokenize(char *p) {
       tokens[i].val = strtol(p, &p, 10);
       i++;
       // 数字文スキップ
-      while(isdigit(*p)) {
-				p++;
+      while (isdigit(*p)) {
+        p++;
       }
       continue;
     }
@@ -45,8 +45,8 @@ void tokenize(char *p) {
   tokens[i].ty = TK_EOF;
   tokens[i].input = p;
 
-  if(DEBUG) {
- 		printf("%d 個のトークンを処理しました。\n", i);
+  if (DEBUG) {
+    printf("%d 個のトークンを処理しました。\n", i);
     dumpTokens(i);
   }
 }

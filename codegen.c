@@ -1,17 +1,16 @@
+#include "9cc.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "9cc.h"
 
 // トークナイズした結果のトークン列はこの配列に保存する
 // 100個以上のトークンは来ないものとする
 Token tokens[100];
 
 int pos = 0;
-//int DEBUG = 1;
+// int DEBUG = 1;
 int DEBUG = 0;
-
 
 // エラーを報告するための関数
 void error(char *msg, char *detail) {
@@ -20,16 +19,15 @@ void error(char *msg, char *detail) {
 }
 
 void debug(char *msg) {
-  if(DEBUG) {
+  if (DEBUG) {
     fprintf(stderr, "%s", msg);
   }
 }
 
-
 void dumpTokens(int maxPos) {
-  if(DEBUG) {
-    for(int i = 0; i < 100 && tokens[i].ty != TK_EOF; i++) {
-	    printf("TOKEN,I=%d,TY=%d,INPUT=%s\n", i, tokens[i].ty, tokens[i].input);
+  if (DEBUG) {
+    for (int i = 0; i < 100 && tokens[i].ty != TK_EOF; i++) {
+      printf("TOKEN,I=%d,TY=%d,INPUT=%s\n", i, tokens[i].ty, tokens[i].input);
     }
   }
 }
@@ -45,16 +43,16 @@ Node *new_node(int op, Node *lhs, Node *rhs) {
 
 Node *new_node_num(int val) {
   Node *node = malloc(sizeof(Node));
-  node->op = ND_NUM; //TODO:消す
+  node->op = ND_NUM; // TODO:消す
   node->ty = ND_NUM;
   node->val = val;
   return node;
 }
 
-Node* term() {
- if (tokens[pos].ty == TK_NUM) {
-    if(DEBUG) {
-			debug("数値ノードを生成\n");
+Node *term() {
+  if (tokens[pos].ty == TK_NUM) {
+    if (DEBUG) {
+      debug("数値ノードを生成\n");
     }
     return new_node_num(tokens[pos++].val);
   }
@@ -62,7 +60,8 @@ Node* term() {
     pos++;
     Node *node = expr();
     if (tokens[pos].ty != ')') {
-      error("開きカッコに対応する閉じカッコがありません: %s", tokens[pos].input);
+      error("開きカッコに対応する閉じカッコがありません: %s",
+            tokens[pos].input);
     }
     pos++;
     return node;
@@ -91,7 +90,7 @@ Node *mul() {
 
 Node *expr() {
   Node *lhs = mul();
-  //printf("expr: tokens[pos].ty == %d\n", tokens[pos].ty);
+  // printf("expr: tokens[pos].ty == %d\n", tokens[pos].ty);
   if (tokens[pos].ty == TK_EOF) {
     return lhs;
   }
@@ -124,11 +123,11 @@ void gen(Node *node) {
     return;
   }
 
-  if(node->lhs != NULL) {
+  if (node->lhs != NULL) {
     gen(node->lhs);
   }
-  if(node->rhs != NULL) {
-     gen(node->rhs);
+  if (node->rhs != NULL) {
+    gen(node->rhs);
   }
 
   printf("  pop rdi\n");
@@ -152,5 +151,3 @@ void gen(Node *node) {
 
   printf("  push rax\n");
 }
-
-

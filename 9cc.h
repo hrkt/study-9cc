@@ -4,11 +4,11 @@
 // トークンの型を表す値
 enum {
   TK_NUM = 256, // 整数トークン
-  TK_EOF = 0,       // 入力の終わりを表すトークン
+  TK_EOF = 0,   // 入力の終わりを表すトークン
 };
 
 enum {
-  ND_NUM = 256,     // 整数のノードの型
+  ND_NUM = 256, // 整数のノードの型
 };
 
 // トークンの型
@@ -19,13 +19,12 @@ typedef struct {
 } Token;
 
 typedef struct Node {
-  int ty;           // 演算子かND_NUM
+  int ty; // 演算子かND_NUM
   int op;
   struct Node *lhs; // 左辺
   struct Node *rhs; // 右辺
   int val;          // tyがND_NUMの場合のみ使う
 } Node;
-
 
 Node *expr();
 void error(char *msg, char *detail);
@@ -38,13 +37,12 @@ void gen(Node *node);
 void tokenize(char *p);
 void dumpTokens(int i);
 
-
 // トークナイズした結果のトークン列はこの配列に保存する
 // 100個以上のトークンは来ないものとする
 extern Token tokens[];
 
 extern int pos;
-//int DEBUG = 1;
+// int DEBUG = 1;
 extern int DEBUG;
 
 #endif

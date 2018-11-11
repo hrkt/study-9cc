@@ -1,9 +1,8 @@
+#include "9cc.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "9cc.h"
-
 
 int main(int argc, char **argv) {
   if (argc != 2) {
@@ -13,8 +12,8 @@ int main(int argc, char **argv) {
 
   // トークナイズする
   tokenize(argv[1]);
-  Node* node = expr();
-  
+  Node *node = expr();
+
   debug("ツリーの生成完了");
 
   // アセンブリの前半部分を出力
