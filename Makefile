@@ -16,7 +16,9 @@ clean:
 	rm -f 9cc *.o *~ tmp* a.out core
 
 debug: 9cc
-	./9cc '2*3+4*5'
+	#./9cc '2*3+4*5'
+	#./9cc '1+2*3'
+	./9cc '2*3+1'
 
 format: 
 	clang-format -i *.c *.h

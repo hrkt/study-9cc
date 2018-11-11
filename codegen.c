@@ -9,8 +9,6 @@
 Token tokens[100];
 
 int pos = 0;
-// int DEBUG = 1;
-int DEBUG = 0;
 
 // エラーを報告するための関数
 void error(char *msg, char *detail) {
@@ -34,7 +32,6 @@ void dumpTokens(int maxPos) {
 
 Node *new_node(int op, Node *lhs, Node *rhs) {
   Node *node = malloc(sizeof(Node));
-  node->op = op;
   node->ty = op;
   node->lhs = lhs;
   node->rhs = rhs;
@@ -43,7 +40,6 @@ Node *new_node(int op, Node *lhs, Node *rhs) {
 
 Node *new_node_num(int val) {
   Node *node = malloc(sizeof(Node));
-  node->op = ND_NUM; // TODO:消す
   node->ty = ND_NUM;
   node->val = val;
   return node;
@@ -74,10 +70,7 @@ Node *mul() {
   if (tokens[pos].ty == TK_EOF) {
     return lhs;
   }
-  if (lhs->ty == ND_NUM) {
-    return lhs;
-  }
-  if (tokens[pos].ty == '*') {
+ if (tokens[pos].ty == '*') {
     pos++;
     return new_node('*', lhs, mul());
   }
@@ -85,12 +78,14 @@ Node *mul() {
     pos++;
     return new_node('/', lhs, mul());
   }
+  if (lhs->ty == ND_NUM) {
+    return lhs;
+  }
   error("mul:想定しないトークンです: %s", tokens[pos].input);
 }
 
 Node *expr() {
   Node *lhs = mul();
-  // printf("expr: tokens[pos].ty == %d\n", tokens[pos].ty);
   if (tokens[pos].ty == TK_EOF) {
     return lhs;
   }
@@ -104,6 +99,7 @@ Node *expr() {
     pos++;
     return new_node('-', lhs, expr());
   }
+/*
   if (tokens[pos].ty == '*') {
     debug("accept: *\n");
     pos++;
@@ -114,11 +110,12 @@ Node *expr() {
     pos++;
     return new_node('/', lhs, expr());
   }
+*/
   error("expr:想定しないトークンです: %s", tokens[pos].input);
 }
 
 void gen(Node *node) {
-  if (node->op == ND_NUM) {
+  if (node->ty == ND_NUM) {
     printf("  push %d\n", node->val);
     return;
   }

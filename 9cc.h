@@ -20,7 +20,6 @@ typedef struct {
 
 typedef struct Node {
   int ty; // 演算子かND_NUM
-  int op;
   struct Node *lhs; // 左辺
   struct Node *rhs; // 右辺
   int val;          // tyがND_NUMの場合のみ使う
@@ -36,13 +35,13 @@ Node *mul();
 void gen(Node *node);
 void tokenize(char *p);
 void dumpTokens(int i);
+void number();
 
 // トークナイズした結果のトークン列はこの配列に保存する
 // 100個以上のトークンは来ないものとする
 extern Token tokens[];
 
 extern int pos;
-// int DEBUG = 1;
 extern int DEBUG;
 
 #endif

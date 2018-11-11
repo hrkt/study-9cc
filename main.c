@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+int DEBUG = 0;
+//int DEBUG = 1;
+
 int main(int argc, char **argv) {
   if (argc != 2) {
     fprintf(stderr, "引数の個数が正しくありません\n");
