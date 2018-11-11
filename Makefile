@@ -17,3 +17,6 @@ clean:
 
 debug: 9cc
 	./9cc '2*3+4*5'
+
+format: 
+	clang-format -i *.c *.h
